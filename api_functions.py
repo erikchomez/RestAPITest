@@ -7,6 +7,12 @@ STOPWORDS = {'for', 'with', 'and'}
 
 
 def tsv_to_dict_app(path):
+    """
+    Returns the tsv_file as a list of dicts.
+    To be used in app.py
+    :param path: file path
+    :return: the processed data
+    """
     tsv_file = open(path)
     read_tsv = csv.reader(tsv_file, delimiter='\t')
 
@@ -63,6 +69,19 @@ def search(data: 'list', request: 'dict') -> list:
     :param request: dictionary containing the request
     :return: a list of dictionaries containing the search results
     """
+    request_keys = set(request.keys())
+    # makes sure that the length of the keys is 2, anything more is wrong
+    if len(request_keys) != 2:
+        raise ValueError('Unsupported value for request type!')
+
+    # conditions and pagination must be in the keys, otherwise it is wrong
+    if 'conditions' not in request_keys and 'pagination' not in request_keys:
+        raise ValueError('Unsupported value for request type!')
+
+    # checks to make sure the from pagination is valid
+    if request['pagination']['from'] > 1:
+        raise ValueError('Pagination start must be greater than 0!')
+
     search_list = []
     search_size = abs(request['pagination']['from'] - request['pagination']['size']) + 1
 
@@ -91,13 +110,21 @@ def keywords(data: list, request: dict) -> dict:
     :param request: dictionary containing the request
     :return: a dictionary with a list as the only value which holds keywords and their frequency
     """
+    request_keys = set(request.keys())
+
+    if len(request_keys) != 1:
+        raise ValueError('Unsupported value for request type!')
+
+    if 'keywords' not in request_keys:
+        raise ValueError('Unsupported value for request type!')
+
     keyword_frequencies = {'keywordFrequencies': []}
 
     for v in request['keywords']:
         keywords_dict = {v: 0}
         for i in data:
-            if v in i:
-                keywords_dict[i] +=1
+            if v in i['title']:
+                keywords_dict[v] += 1
         keyword_frequencies['keywordFrequencies'].append(keywords_dict)
 
     return keyword_frequencies
@@ -145,9 +172,10 @@ def main():
 
     keyword_request = {"keywords": ["toner", "ink"]}
 
-    # print(autocomplete(list_of_dicts, auto_request))
-    # print(search(list_of_dicts, search_request))
-    # print(keywords(list_of_dicts, keyword_request))
+    print('Autocomplete\n', autocomplete(list_of_dicts, auto_request))
+    print('Search request\n', search(list_of_dicts, search_request))
+    print('Keywords\n', keywords(list_of_dicts, keyword_request))
+    print('Top 10\n', most_frequent(list_of_dicts))
 
 
 if __name__ == '__main__':
