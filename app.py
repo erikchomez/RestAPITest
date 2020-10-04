@@ -53,10 +53,9 @@ def auto_complete_query_checker(query_params: dict) -> bool:
 @app.route('/api/products/autocomplete', methods=['GET'])
 def auto_complete():
     query_params = request.args.to_dict(flat=True)
-
     if query_params:
-        if auto_complete_query_checker(FILE, query_params):
-            l1 = api.autocomplete(query_params)
+        if auto_complete_query_checker(query_params):
+            l1 = api.autocomplete(FILE, query_params)
             return jsonify(l1)
         else:
             flash('Query parameters formatted incorrectly.')

@@ -47,7 +47,7 @@ def autocomplete(data: 'list', request: dict) -> list:
 
     for i in data:
         if request['type'] == 'brand':
-            if i['brandName'].startswith(request['prefix']):
+            if i['brandName'].lower().startswith(request['prefix']):
                 autocomplete_list.add(i['brandName'])
 
         elif request['type'] == 'name':
@@ -167,7 +167,7 @@ def main():
 
     list_of_dicts = tsv_to_dict(read_tsv)
 
-    auto_request = {'type': 'category', 'prefix': 'B'}
+    auto_request = {'type': 'brand', 'prefix': 'Can'}
 
     search_request = {"conditions": [{"type": "brandId", "values": ["4053", "4534"]},
                                      {"type": "categoryName", "values": ["Printers & Scanners"]}],
