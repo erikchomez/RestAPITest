@@ -82,6 +82,10 @@ def search(data: 'list', request: 'dict') -> list:
     if request['pagination']['from'] > 1:
         raise ValueError('Pagination start must be greater than 0!')
 
+    for i in range(len(request['conditions'])):
+        if request['conditions'][i]['type'] not in KEYWORDS:
+            raise ValueError('Unsupported value for request type!')
+
     search_list = []
     search_size = abs(request['pagination']['from'] - request['pagination']['size']) + 1
 
@@ -165,17 +169,17 @@ def main():
 
     auto_request = {'type': 'category', 'prefix': 'B'}
 
-    search_request = {"conditions": [{"type": "brandName", "values": ["Brother", "Canon"]},
+    search_request = {"conditions": [{"type": "brandId", "values": ["4053", "4534"]},
                                      {"type": "categoryName", "values": ["Printers & Scanners"]}],
                       "pagination": {"from": 1, "size": 3}
                       }
 
     keyword_request = {"keywords": ["toner", "ink"]}
 
-    print('Autocomplete\n', autocomplete(list_of_dicts, auto_request))
-    print('Search request\n', search(list_of_dicts, search_request))
-    print('Keywords\n', keywords(list_of_dicts, keyword_request))
-    print('Top 10\n', most_frequent(list_of_dicts))
+    print('Autocomplete\n', autocomplete(list_of_dicts, auto_request), '\n')
+    print('Search request\n', search(list_of_dicts, search_request), '\n')
+    print('Keywords\n', keywords(list_of_dicts, keyword_request), '\n')
+    print('Top 10\n', most_frequent(list_of_dicts), '\n')
 
 
 if __name__ == '__main__':

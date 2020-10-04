@@ -70,6 +70,11 @@ def auto_complete():
 
 
 def search_query_checker(query_params: dict) -> bool:
+    """
+    Helper function that returns a bool determining if the query parameters are formatted properly.
+    :param query_params: dictionary containing the query parameters
+    :return: True or False depending on the formatting
+    """
     request_keys = set(query_params.keys())
     # makes sure that the length of the keys is 2, anything more is wrong
     if len(request_keys) != 2:
@@ -156,8 +161,8 @@ def keywords():
         return render_template('index.html')
 
 
-@app.route('/api/products/mostfrequent', methods=['GET'])
-def custom():
+@app.route('/api/products/most_frequent', methods=['GET'])
+def most_frequent():
     l1 = api.most_frequent(FILE)
 
     return jsonify(l1)
