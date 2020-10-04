@@ -1,4 +1,12 @@
 # Simple API solutions
+In order to run this application, simply create a virtual environment and pip install flask.
+No other libraries besides the built-ins os, csv, and json were used. You can run app.py and you will be able to use
+localhost:8088. However, if you run api_functions.py, you can see how each endpoint is implemented as well as change 
+requests directly. 
+
+Place the entire zip contents in the same folder or grab the files from the following link: 
+https://github.com/erikchomez/RestAPITest
+
 
 Having never designed an API, let alone a REST API, this assignment turned out to be a fun challenge.
 My program runs on Python and utilizes Flask as a support. 
